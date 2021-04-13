@@ -11,7 +11,7 @@ class App extends Component {
   };
   componentDidMount() {
     //fetch('http://dmathys.com:3001/villagersitems')
-    fetch("http://desktop-pjt8gar:3001/villagersitems")
+    fetch("https://desktop-pjt8gar:3001/villagersitems")
       .then((res) => res.json())
       .then((data) => {
         console.log("data:", data);
@@ -187,7 +187,7 @@ getCheckBox(){
   updatePictureStatus(villager) {
     console.log("this1", this);
     villager.pictureOwned = true;
-    fetch("http://desktop-pjt8gar:3001/api/villagersitems/" + villager.id, {
+    fetch("https://desktop-pjt8gar:3001/api/villagersitems/" + villager.id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -214,7 +214,7 @@ getCheckBox(){
 
   saveItem(villager) {
     //fetch('http://dmathys.com:3001/villagersitems')
-    fetch("http://desktop-pjt8gar:3001/api/villagersitems/0", {
+    fetch("https://desktop-pjt8gar:3001/api/villagersitems/0", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
