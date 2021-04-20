@@ -1,14 +1,18 @@
 import React, { Component } from "react";
-import Villagers from "./villagers/villager";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Villagers from "./Components/villagers";
+import Login from "./Components/login";
 
 class App extends Component {
   fileReader = new FileReader();
 
   state = {
+    token: undefined,
     filterAlreadyOwned: true,
     villagers: [],
     filteredVillagers: [],
   };
+  
   componentDidMount() {
     //fetch('http://dmathys.com:3001/villagersitems')
     fetch("https://desktop-pjt8gar:3001/villagersitems")
@@ -22,33 +26,54 @@ class App extends Component {
       })
       .catch((reason) => console.log("error", reason));
   }
-  getSortedList(data) {
+ getSortedList(data) {
     return data._embedded.villagerItemList.sort((a, b) =>
       a.name.localeCompare(b.name)
     );
   }
 
-  toggleCheckBox(e){
-    let newFlag = !this.state.filterAlreadyOwned
-    this.setState({filterAlreadyOwned: newFlag}, () => this.initFilteredList());
-  }  
+  toggleCheckBox(e) {
+    let newFlag = !this.state.filterAlreadyOwned;
+    this.setState({ filterAlreadyOwned: newFlag }, () =>
+      this.initFilteredList()
+    );
+  }
   initFilteredList() {
     let villagers = [...this.state.villagers];
     villagers = this.filterAlreadyOwned(villagers);
-    this.setState({ filteredVillagers: villagers}, () => {
+    this.setState({ filteredVillagers: villagers }, () => {
       console.log(this.state.filteredVillagers);
     });
   }
-  render() {
-    
-    return (
-      <div>
-        {this.getHeader()}
 
-        <Villagers
-          villagers={this.state.filteredVillagers}
-          updateMethod={this.updatePictureStatusBound}
-        />
+  setToken(token){ 
+    this.setState({ token: token }, () => {
+      console.log(this.state.token);
+    });
+  }
+  
+  setTokenBound = this.setToken.bind(this);
+
+  render() {
+
+
+  if(!this.state.token) {
+    return <Login setToken={this.setTokenBound} />
+  }
+    return (
+      <div className="bg-dark">
+        <h1 className="p-2 text-white">Application</h1>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/villagers">
+              {this.getHeader()}
+              <Villagers
+                villagers={this.state.filteredVillagers}
+                updateMethod={this.updatePictureStatusBound}
+              />
+            </Route>
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }
@@ -59,32 +84,46 @@ class App extends Component {
           <h1 className="p-3 mb-2 bg-dark text-white">Liste des photos</h1>
         </center>
         <div class="mb-2  form-inline">
-        {this.getButton()}
-        {this.getFilter()}
-        {this.getCheckBox()}
+          {this.getButton()}
+          {this.getFilter()}
+          {this.getCheckBox()}
         </div>
       </div>
     );
   }
-getCheckBox(){
-  return (
-  <div className="form-check">
-  <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" defaultChecked onChange={(e) => {
+  getCheckBox() {
+    return (
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          value=""
+          id="flexCheckChecked"
+          defaultChecked
+          onChange={(e) => {
             console.log(e.target.value);
             this.toggleCheckBox(e);
-          }}/>
-  <label className="form-check-label m-2 bg-dark text-white" for="flexCheckChecked">
-    ne montrer que les manquantes
-  </label>
-</div>)
-}
+          }}
+        />
+        <label
+          className="form-check-label m-2 bg-dark text-white"
+          for="flexCheckChecked"
+        >
+          ne montrer que les manquantes
+        </label>
+      </div>
+    );
+  }
   getFilter() {
-    'U+1F50E'
+    "U+1F50E";
     return (
-      <label for='filter' className="m-2 bg-dark text-white col-sm-2 col-form-label">
-        {'\ud83d\udd0d'}
+      <label
+        for="filter"
+        className="m-2 bg-dark text-white col-sm-2 col-form-label"
+      >
+        {"\ud83d\udd0d"}
         <input
-          id='filter'
+          id="filter"
           className="m-2 form-control col-sm-10"
           type="text"
           name="filter"
@@ -126,8 +165,7 @@ getCheckBox(){
   }
   filterAlreadyOwned(temp) {
     if (this.state.filterAlreadyOwned) {
-      temp = temp.filter((value) => value.pictureOwned === false
-      );
+      temp = temp.filter((value) => value.pictureOwned === false);
     }
     return temp;
   }
@@ -160,7 +198,7 @@ getCheckBox(){
     if (element.trim() !== "") {
       const villager = { name: element, pictureOwned: false };
       console.log("villager", villager);
-      if (!this.state.filterAlreadyOwned){ 
+      if (!this.state.filterAlreadyOwned) {
         newVillagers.push(villager);
       }
       this.saveItem(villager);
@@ -178,7 +216,7 @@ getCheckBox(){
   handleVillager(newVillagers, index, villager) {
     if (this.state.filterAlreadyOwned) {
       const removedVillager = newVillagers.splice(index, 1);
-      console.log("removedVillager", removedVillager)
+      console.log("removedVillager", removedVillager);
     } else {
       newVillagers[index].pictureOwned = villager.pictureOwned;
     }

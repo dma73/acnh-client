@@ -1,5 +1,5 @@
 import React from 'react'
-import PictureOwned from '../PictureOwned';
+import PictureOwned from './PictureOwned';
 import { Component } from 'react'
 
 class Villagers extends Component {
