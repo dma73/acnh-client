@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './login.css';
 
-async function loginUser(credentials) {
- return fetch('https://desktop-pjt8gar:3001/api/login', {
+async function createUser(credentials) {
+ return fetch('https://desktop-pjt8gar:3001/api/createlogin', {
    method: 'POST',
    headers: {
      'Content-Type': 'application/json'
@@ -13,35 +13,33 @@ async function loginUser(credentials) {
    .then(data => data.json())
 }
 
-export default function Login({ setToken, setLoginCreated, loginFailed }) {
+export default function CreateLogin({ setLoginCreated }) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
-  const displayError = (loginFailed ? {display: 'block'} : {display: 'none'});
+  const [confirmPassword, setConfirmPassword] = useState();
+  const [email, setEmail] = useState();
     console.log("username",username);
     console.log("password",password);
+    console.log("confirmPassword",confirmPassword);
+    console.log("email",email);
 
   const handleSubmit = async e => {
     e.preventDefault();
-    //const token = 'AIGS-6DGI-HD90-092H-FD72';
-    const token = await loginUser({
-      userId:username,
-      password:password
-    });
-    setToken(token,username);
-  }
-  const handleCreateLogin = async e => {
-    //e.preventDefault();
-    setLoginCreated(false);
+    if (password === confirmPassword){
+      await createUser({
+        userId:username,
+        password:password,
+        email:email
+     });
+      setLoginCreated(true);
+    }
   }
 
   return(
       <div className="overlay">
     <div className="d-flex flex-column top">
-      <h1>Please Log In</h1>
+      <h1>Please Create User</h1>
       <form onSubmit={handleSubmit}>
-        <label className="text-danger" style={displayError}>
-          <p>Invalid Username or Password</p>
-        </label>
         <label>
           <p>Username</p>
           <input className="m-2 form-control col-sm-10" type="text" onChange={e => setUserName(e.target.value)} />
@@ -50,9 +48,14 @@ export default function Login({ setToken, setLoginCreated, loginFailed }) {
           <p>Password</p>
           <input className="m-2 form-control col-sm-10" type="password" onChange={e => setPassword(e.target.value)} />
         </label>
-        <div>
-          <label className="btn btn-secondary m-2" onClick={handleCreateLogin}>Create New User</label>
-        </div>
+        <label>
+          <p>ConfirmPassword</p>
+          <input className="m-2 form-control col-sm-10" type="password" onChange={e => setConfirmPassword(e.target.value)} />
+        </label>
+        <label>
+          <p>Email Address</p>
+          <input className="m-2 form-control col-sm-10" type="text" onChange={e => setEmail(e.target.value)} />
+        </label>
         <div>
           <button className="btn btn-primary m-2" type="submit">Submit</button>
         </div>
@@ -60,9 +63,8 @@ export default function Login({ setToken, setLoginCreated, loginFailed }) {
     </div>
     </div>
   )
+  
 }
-
-Login.propTypes = {
-  setToken: PropTypes.func.isRequired,
+CreateLogin.propTypes = {
   setLoginCreated: PropTypes.func.isRequired
 };
