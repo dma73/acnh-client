@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './login.css';
 
 async function loginUser(credentials) {
- return fetch('http://dmathys.com:3002/api/login', {
+ return fetch('https://dmathys.com:3001/api/login', {
    method: 'POST',
    headers: {
      'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ export default function Login({ setToken, setLoginCreated, loginFailed }) {
       userId:username,
       password:password
     });
-    setToken(token,username);
+    setToken(token.token,username);
   }
   const handleCreateLogin = async e => {
     //e.preventDefault();

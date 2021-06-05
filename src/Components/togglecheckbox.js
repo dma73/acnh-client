@@ -18,7 +18,7 @@ export default function ToggleCheckBox({ filterAlreadyOwned, cbLabel, setToggleM
           />
           <label
             className="form-check-label m-2 bg-dark text-white"
-            for="flexCheckChecked"
+            htmlFor="flexCheckChecked"
           >
             {cbLabel}
           </label>

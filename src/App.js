@@ -75,7 +75,7 @@ class App extends Component {
           <Switch>
             <Route path="/villagers">
               <Villagers
-                user={this.state.user}/>
+                user={this.state.user} token={this.state.token}/>
             </Route>
           </Switch>
         </BrowserRouter>

@@ -14,7 +14,7 @@ class Villagers extends Component {
   componentDidMount() {
     console.log('token:',this.props.token);
     //fetch('http://dmathys.com:3001/villagersitems')
-    fetch("http://dmathys.com:3002/api/villagersitemsget", {
+    fetch("https://dmathys.com:3001/api/villagersitemsget", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -178,8 +178,12 @@ class Villagers extends Component {
 
   updatePictureStatus(villager) {
     console.log("this1", this);
+    console.log("villager", villager);
+    console.log("token", this.props.token)
     villager.pictureOwned = true;
-    fetch("http://dmathys.com:3002/api/villagersitems/" + villager.id, {
+    villager.token = this.props.token;
+    console.log("villager", villager);
+    fetch("https://dmathys.com:3001/api/villagersitems/" + villager.id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -205,8 +209,9 @@ class Villagers extends Component {
   updatePictureStatusBound = this.updatePictureStatus.bind(this);
 
   saveItem(villager) {
+    villager.token = this.props.token;
     //fetch('http://dmathys.com:3001/villagersitems')
-    fetch("http://dmathys.com:3002/api/villagersitems/0", {
+    fetch("https://dmathys.com:3001/api/villagersitems/0", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
