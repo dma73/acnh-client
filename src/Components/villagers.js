@@ -4,6 +4,7 @@ import ToggleCheckBox from './togglecheckbox';
 import { Component } from 'react'
 
 class Villagers extends Component {
+  nano = require('nano')('http://couchdb-denis-mathys2001.alwaysdata.net:5984');
   fileReader = new FileReader();
   state = {
     filterAlreadyOwned: true,
@@ -13,6 +14,11 @@ class Villagers extends Component {
 
   componentDidMount() {
     console.log('token:',this.props.token);
+    this.nano.db.use('denis-mathys2001_villagers').get('2a0580eb69d3153841a74f29c9007d16')
+	.then((body) => {
+		console.log(body);
+	});
+
     //fetch('http://dmathys.com:3001/villagersitems')
     fetch("https://dmathys.com:3001/api/villagersitemsget", {
       method: 'POST',
